@@ -17,7 +17,7 @@ An advanced AI-powered financial analysis and investment recommendation system.
 1.  **Clone the Repository:**
 
     ```bash
-    git clone <repository_url>
+    git clone https://github.com/Mohamed-Hamdouni/Financial-Advisor.git
     cd financial-advisor
     ```
 
