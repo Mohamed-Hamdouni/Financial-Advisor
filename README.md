@@ -21,21 +21,13 @@ An advanced AI-powered financial analysis and investment recommendation system.
     cd financial-advisor
     ```
 
-2.  **Create a Virtual Environment (Python 3.10 required):**
+2.  **Create a Virtual Environment & Install Dependencies:**
 
     ```bash
-    python3 -m venv venv
-    source venv/bin/activate
-    ```
-
-3.  **Install Dependencies:**
-
-    ```bash
-    pip install --upgrade pip
     bash setup.sh
     ```
 
-4.  **Set Up Environment Variables:**
+3.  **Set Up Environment Variables:**
 
     -   Create a `.env` file in the root directory.
     -   Add your API keys:
@@ -50,19 +42,13 @@ An advanced AI-powered financial analysis and investment recommendation system.
 
 ## Running the Application
 
-1.  **Activate the Virtual Environment:**
-
-    ```bash
-    source venv/bin/activate
-    ```
-
-2.  **Start the Application:**
+1.  **Start the Application:**
 
     ```bash
     bash start.sh
     ```
 
-3.  **Access the Interface:**
+2.  **Access the Interface:**
 
     -   Open your web browser and go to the URL provided in the terminal (usually `http://localhost:8501`).
 
