@@ -10,7 +10,7 @@ fi
 
 # Création de l'environnement virtuel
 echo "📦 Creating virtual environment..."
-python3 -m venv venv
+python3.10 -m venv venv
 source venv/bin/activate
 
 # Mise à jour de pip
@@ -24,7 +24,6 @@ PACKAGES=(
     "openai"
     "langchain"
     "langchain-community"
-    "langchain-openai"
     "numpy"
     "pandas"
     "sentence_transformers"
@@ -53,6 +52,8 @@ ADDITIONAL_PACKAGES=(
     "umap-learn"
     "python-dotenv"
     "streamlit"
+    "langchain-openai"
+    "chromadb openai"
 )
 
 for package in "${ADDITIONAL_PACKAGES[@]}"; do
