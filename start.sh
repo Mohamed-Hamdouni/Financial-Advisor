@@ -7,9 +7,6 @@ chmod +x start.sh
 chmod -R 755 vector_db
 chmod -R 755 data
 
-# Clear existing log file
-echo "" > terminal.log
-
 # Activate virtual environment and run streamlit
 source venv/bin/activate
 if [ $? -ne 0 ]; then
@@ -17,7 +14,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo "Starting Financial Advisor at $(date)" | tee -a terminal.log
+echo "Starting Financial Advisor at $(date)"
 
-# Run streamlit and tee output to terminal and log file
-streamlit run app/main.py 2>&1 | tee -a terminal.log
+# Run streamlit app
+streamlit run app/main.py
