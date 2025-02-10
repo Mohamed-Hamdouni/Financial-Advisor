@@ -11,11 +11,11 @@ except ImportError:
 # LangChain
 from langchain.schema import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import Chroma
 
 from langchain.agents import Tool, AgentType, initialize_agent
-from langchain_community.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 
 import feedparser
 import openai
@@ -39,13 +39,13 @@ except ImportError:
 # LangChain - pour la structure "Document", les embeddings, etc.
 from langchain.schema import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import OpenAIEmbeddings
-from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
+from langchain_openai import OpenAIEmbeddings
+from chromadb.utils import embedding_functions
 from langchain_community.vectorstores import Chroma
 
 # Pour créer des Tools et Agents
 from langchain.agents import Tool, AgentType, initialize_agent
-from langchain_community.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from langchain.prompts.chat import (
     SystemMessagePromptTemplate,
     HumanMessagePromptTemplate,
@@ -75,7 +75,9 @@ pdf_files = glob.glob(f"{PDF_FOLDER}/*.pdf")
 load_dotenv()
 
 openai_key = os.getenv("OPENAI_API_KEY")
-client = OpenAI(api_key=openai_key)
+client = OpenAI(
+    api_key=openai_key,
+)
 ###############################################################################
 # A) Building/Loading the Vector DB (RAG)
 ###############################################################################
@@ -100,11 +102,16 @@ def build_or_load_vector_db(pdf_folder: str, persist_dir: str) -> Chroma:
     Creates or loads a Chroma DB from the PDF folder.
     If persist_dir exists, loads it; otherwise, builds a new one.
     """
+    # Créer la fonction d'embedding OpenAI pour ChromaDB
+    openai_ef = embedding_functions.OpenAIEmbeddingFunction(
+        api_key=os.getenv("OPENAI_API_KEY"),
+        model_name="text-embedding-ada-002"
+    )
+
     if os.path.exists(persist_dir):
         print("[INFO] Loading existing Chroma DB...")
-        embeddings = OpenAIEmbeddings(openai_api_key=os.getenv("OPENAI_API_KEY", ""))
         vector_db = Chroma(
-            embedding_function=embeddings,
+            embedding_function=openai_ef,
             persist_directory=persist_dir
         )
         return vector_db
@@ -114,10 +121,9 @@ def build_or_load_vector_db(pdf_folder: str, persist_dir: str) -> Chroma:
         splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
         split_docs = splitter.split_documents(docs)
 
-        embeddings = OpenAIEmbeddings(openai_api_key=os.getenv("OPENAI_API_KEY", ""))
         vector_db = Chroma.from_documents(
             documents=split_docs,
-            embedding=embeddings,
+            embedding_function=openai_ef,
             persist_directory=persist_dir
         )
         vector_db.persist()
